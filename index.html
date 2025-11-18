@@ -72,10 +72,16 @@
             flex-direction: column;
             gap: 1.5rem;
         }
+        .input-sound-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
         .input-group {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            flex: 1;
         }
         .input-group label {
             font-weight: bold;
@@ -88,14 +94,32 @@
             border-radius: 5px;
             font-size: 1rem;
             text-align: center;
+            width: 100%;
+        }
+        .sound-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .sound-btn {
+            background-color: #FF0000;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .sound-btn.on {
+            background-color: #00aa00;
         }
         .button-group {
             display: flex;
-            gap: 1rem;
             justify-content: center;
             margin-top: 1rem;
         }
-        .federation-btn, .export-btn {
+        .federation-btn {
             background-color: #002060;
             color: white;
             border: none;
@@ -105,12 +129,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .export-btn {
-            background-color: #FF0000;
-        }
-        .export-btn:hover {
-            background-color: #002060;
         }
         .federation-btn:hover {
             background-color: #FF0000;
@@ -210,17 +228,35 @@
     </header>
     <main>
         <div class="breathing-controls">
-            <div class="input-group">
-                <label for="inhale">Inhale Duration (sec):</label>
-                <input type="number" id="inhale" min="1" max="30" value="4" />
+            <div class="input-sound-group">
+                <div class="input-group">
+                    <label for="inhale">Inhale Duration (sec):</label>
+                    <input type="number" id="inhale" min="1" max="30" value="4" />
+                </div>
+                <div class="sound-toggle">
+                    <span>Sound:</span>
+                    <button id="inhale-sound-btn" class="sound-btn on" data-phase="inhale">ON</button>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="hold">Hold Duration (sec):</label>
-                <input type="number" id="hold" min="1" max="60" value="7" />
+            <div class="input-sound-group">
+                <div class="input-group">
+                    <label for="hold">Hold Duration (sec):</label>
+                    <input type="number" id="hold" min="1" max="60" value="16" />
+                </div>
+                <div class="sound-toggle">
+                    <span>Sound:</span>
+                    <button id="hold-sound-btn" class="sound-btn on" data-phase="hold">ON</button>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="exhale">Exhale Duration (sec):</label>
-                <input type="number" id="exhale" min="1" max="30" value="8" />
+            <div class="input-sound-group">
+                <div class="input-group">
+                    <label for="exhale">Exhale Duration (sec):</label>
+                    <input type="number" id="exhale" min="1" max="30" value="8" />
+                </div>
+                <div class="sound-toggle">
+                    <span>Sound:</span>
+                    <button id="exhale-sound-btn" class="sound-btn on" data-phase="exhale">ON</button>
+                </div>
             </div>
             <div class="input-group">
                 <label for="cycles">Number of Cycles:</label>
@@ -256,6 +292,23 @@
         let exerciseOverlay = document.getElementById('exercise-overlay');
         let quitBtn = document.getElementById('quit-btn');
 
+        // Sound toggle state
+        let soundStates = {
+            inhale: true,
+            hold: true,
+            exhale: true
+        };
+
+        // Toggle sound buttons
+        document.querySelectorAll('.sound-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const phase = this.getAttribute('data-phase');
+                soundStates[phase] = !soundStates[phase];
+                this.textContent = soundStates[phase] ? 'ON' : 'OFF';
+                this.classList.toggle('on', soundStates[phase]);
+            });
+        });
+
         // Start exercise
         document.getElementById('start-btn').addEventListener('click', function() {
             const inhale = parseInt(document.getElementById('inhale').value);
@@ -287,21 +340,21 @@
 
             // Inhale phase
             breathingLogo.style.animation = `breathe-in ${inhale}s ease-in-out forwards`;
-            playGong();
+            if (soundStates.inhale) playGong();
             setTimeout(() => {
                 if (!isRunning) return;
                 phaseInfo.textContent = "Hold...";
 
                 // Hold phase
                 breathingLogo.style.animation = `breathe-hold ${hold}s linear forwards`;
-                playGong();
+                if (soundStates.hold) playGong();
                 setTimeout(() => {
                     if (!isRunning) return;
                     phaseInfo.textContent = "Exhale...";
 
                     // Exhale phase
                     breathingLogo.style.animation = `breathe-out ${exhale}s ease-in-out forwards`;
-                    playGong();
+                    if (soundStates.exhale) playGong();
                     setTimeout(() => {
                         if (!isRunning) return;
                         cycleCount++;
