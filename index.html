@@ -382,17 +382,17 @@
             gongSound.play();
         }
 
-        // Play gong 5 times at the end
-        function playGongFiveTimes() {
-            let count = 0;
-            const interval = setInterval(() => {
-                playGong();
-                count++;
-                if (count >= 5) {
-                    clearInterval(interval);
-                }
-            }, 1000);
+        // Play gong 3 times at the end
+function playGongThreeTimes() {
+    let count = 0;
+    const interval = setInterval(() => {
+        playGong();
+        count++;
+        if (count >= 3) {
+            clearInterval(interval);
         }
+    }, 1000);
+}
     </script>
 </body>
 </html>
