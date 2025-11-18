@@ -1,45 +1,50 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#002060" />
     <link rel="stylesheet" href="style.css" />
-    <title>Exercice de Respiration — O₂ Freediving</title>
+    <title>Breathing Exercise — O₂ Freediving</title>
 </head>
 <body>
     <header>
         <div class="logo-container">
-            <img src="image/logo-o2freediving.png" alt="O₂ Freediving Logo" class="logo" id="breathing-logo" width="120" height="120" loading="lazy" />
+            <img src="image/logo-o2freediving.png" alt="O₂ Freediving Logo" class="logo" width="120" height="120" loading="lazy" />
             <p class="logo-text">O₂ Freediving</p>
         </div>
-        <h1>EXERCICE DE RESPIRATION</h1>
-        <p class="subtitle">PRATIQUE TA COHÉRENCE CARDIAQUE</p>
+        <h1>BREATHING EXERCISE</h1>
+        <p class="subtitle">PRACTICE YOUR BREATHING CYCLES</p>
     </header>
     <main>
-        <div class="breathing-controls">
-            <div class="input-group">
-                <label for="inspire">Durée d'inspiration (sec) :</label>
-                <input type="number" id="inspire" min="1" max="30" value="4" />
+        <div class="breathing-container">
+            <div class="breathing-logo-container">
+                <img src="image/logo-o2freediving.png" alt="Breathing Logo" class="breathing-logo" id="breathing-logo" />
+                <p id="phase-info" class="phase-info">Ready to start</p>
             </div>
-            <div class="input-group">
-                <label for="retenue">Durée de rétention (sec) :</label>
-                <input type="number" id="retenue" min="1" max="60" value="16" />
+            <div class="breathing-controls">
+                <div class="input-group">
+                    <label for="inhale">Inhale Duration (sec):</label>
+                    <input type="number" id="inhale" min="1" max="30" value="4" />
+                </div>
+                <div class="input-group">
+                    <label for="hold">Hold Duration (sec):</label>
+                    <input type="number" id="hold" min="1" max="60" value="16" />
+                </div>
+                <div class="input-group">
+                    <label for="exhale">Exhale Duration (sec):</label>
+                    <input type="number" id="exhale" min="1" max="30" value="8" />
+                </div>
+                <div class="input-group">
+                    <label for="cycles">Number of Cycles:</label>
+                    <input type="number" id="cycles" min="1" max="20" value="5" />
+                </div>
+                <div class="button-group">
+                    <button id="start-btn" class="federation-btn">Start Exercise</button>
+                    <button id="stop-btn" class="export-btn" style="display: none;">Stop Exercise</button>
+                </div>
+                <p id="cycle-counter" class="cycle-counter">Cycle 0/5</p>
             </div>
-            <div class="input-group">
-                <label for="expire">Durée d'expiration (sec) :</label>
-                <input type="number" id="expire" min="1" max="30" value="8" />
-            </div>
-            <div class="input-group">
-                <label for="repetitions">Nombre de répétitions :</label>
-                <input type="number" id="repetitions" min="1" max="20" value="5" />
-            </div>
-            <button id="start-btn" class="federation-btn">Lancer l'exercice</button>
-            <button id="stop-btn" class="export-btn" style="display: none;">Arrêter</button>
-        </div>
-        <div class="cycle-info">
-            <p id="cycle-counter">Cycle 0/5</p>
-            <p id="phase-info">Prêt à commencer</p>
         </div>
     </main>
     <footer>
