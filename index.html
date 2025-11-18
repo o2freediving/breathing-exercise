@@ -129,6 +129,12 @@
             align-items: center;
             flex-direction: column;
         }
+        .exercise-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
         .exercise-logo {
             width: 200px;
             height: 200px;
@@ -146,6 +152,21 @@
             color: white;
             font-size: 1.5rem;
             margin-bottom: 2rem;
+        }
+        .quit-btn {
+            background-color: #FF0000;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
+        }
+        .quit-btn:hover {
+            background-color: #002060;
         }
         /* Animation for breathing logo */
         @keyframes breathe-in {
@@ -207,14 +228,16 @@
             </div>
             <div class="button-group">
                 <button id="start-btn" class="federation-btn">Start Exercise</button>
-                <button id="stop-btn" class="export-btn" style="display: none;">Stop Exercise</button>
             </div>
         </div>
     </main>
     <div class="exercise-overlay" id="exercise-overlay">
-        <img src="image/logo-o2freediving.png" alt="Breathing Logo" class="exercise-logo" id="breathing-logo" />
-        <p id="phase-info" class="phase-info">Inhale...</p>
-        <p id="cycle-counter" class="cycle-counter">Cycle 0/5</p>
+        <div class="exercise-content">
+            <img src="image/logo-o2freediving.png" alt="Breathing Logo" class="exercise-logo" id="breathing-logo" />
+            <p id="phase-info" class="phase-info">Inhale...</p>
+            <p id="cycle-counter" class="cycle-counter">Cycle 0/5</p>
+            <button id="quit-btn" class="quit-btn">Quit Exercise</button>
+        </div>
     </div>
     <footer>
         <p>© 2025 O₂ Freediving. All rights reserved.</p>
@@ -231,6 +254,7 @@
         let phaseInfo = document.getElementById('phase-info');
         let cycleCounter = document.getElementById('cycle-counter');
         let exerciseOverlay = document.getElementById('exercise-overlay');
+        let quitBtn = document.getElementById('quit-btn');
 
         // Start exercise
         document.getElementById('start-btn').addEventListener('click', function() {
@@ -245,19 +269,14 @@
             cycleCounter.textContent = `Cycle ${cycleCount}/${totalCycles}`;
             phaseInfo.textContent = "Inhale...";
 
-            document.getElementById('start-btn').style.display = 'none';
-            document.getElementById('stop-btn').style.display = 'block';
             exerciseOverlay.style.display = 'flex';
-
             startBreathingCycle(inhale, hold, exhale);
         });
 
-        // Stop exercise
-        document.getElementById('stop-btn').addEventListener('click', function() {
+        // Quit exercise
+        quitBtn.addEventListener('click', function() {
             isRunning = false;
             breathingLogo.style.animation = 'none';
-            document.getElementById('start-btn').style.display = 'block';
-            document.getElementById('stop-btn').style.display = 'none';
             exerciseOverlay.style.display = 'none';
             phaseInfo.textContent = "Exercise stopped.";
         });
@@ -268,22 +287,21 @@
 
             // Inhale phase
             breathingLogo.style.animation = `breathe-in ${inhale}s ease-in-out forwards`;
+            playGong();
             setTimeout(() => {
                 if (!isRunning) return;
-                gongSound.currentTime = 0;
-                gongSound.play();
                 phaseInfo.textContent = "Hold...";
 
                 // Hold phase
                 breathingLogo.style.animation = `breathe-hold ${hold}s linear forwards`;
+                playGong();
                 setTimeout(() => {
                     if (!isRunning) return;
-                    gongSound.currentTime = 0;
-                    gongSound.play();
                     phaseInfo.textContent = "Exhale...";
 
                     // Exhale phase
                     breathingLogo.style.animation = `breathe-out ${exhale}s ease-in-out forwards`;
+                    playGong();
                     setTimeout(() => {
                         if (!isRunning) return;
                         cycleCount++;
@@ -294,14 +312,33 @@
                             startBreathingCycle(inhale, hold, exhale);
                         } else {
                             phaseInfo.textContent = "Exercise completed!";
-                            document.getElementById('start-btn').style.display = 'block';
-                            document.getElementById('stop-btn').style.display = 'none';
-                            exerciseOverlay.style.display = 'none';
-                            isRunning = false;
+                            playGongFiveTimes();
+                            setTimeout(() => {
+                                exerciseOverlay.style.display = 'none';
+                                isRunning = false;
+                            }, 5000);
                         }
                     }, exhale * 1000);
                 }, hold * 1000);
             }, inhale * 1000);
+        }
+
+        // Play gong sound
+        function playGong() {
+            gongSound.currentTime = 0;
+            gongSound.play();
+        }
+
+        // Play gong 5 times at the end
+        function playGongFiveTimes() {
+            let count = 0;
+            const interval = setInterval(() => {
+                playGong();
+                count++;
+                if (count >= 5) {
+                    clearInterval(interval);
+                }
+            }, 1000);
         }
     </script>
 </body>
