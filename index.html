@@ -4,8 +4,179 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#002060" />
-    <link rel="stylesheet" href="style.css" />
     <title>Breathing Exercise — O₂ Freediving</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        /* Header Styles */
+        header {
+            background: linear-gradient(90deg, #002060, #FF0000);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            animation: breathe 10s ease-in-out infinite;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(0.8); }
+            50% { transform: scale(1.2); }
+        }
+        .logo-text {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: white;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+        /* Main Breathing Exercise Styles */
+        main {
+            padding: 2rem;
+        }
+        .breathing-controls {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .input-group label {
+            font-weight: bold;
+            color: #002060;
+            font-size: 1rem;
+        }
+        .input-group input {
+            padding: 0.75rem;
+            border: 2px solid #002060;
+            border-radius: 5px;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .federation-btn, .export-btn {
+            background-color: #002060;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .export-btn {
+            background-color: #FF0000;
+        }
+        .export-btn:hover {
+            background-color: #002060;
+        }
+        .federation-btn:hover {
+            background-color: #FF0000;
+        }
+        /* Exercise Overlay */
+        .exercise-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .exercise-logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+        .phase-info {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .cycle-counter {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        /* Animation for breathing logo */
+        @keyframes breathe-in {
+            0% { transform: scale(0.8); }
+            100% { transform: scale(1.3); }
+        }
+        @keyframes breathe-hold {
+            0% { transform: scale(1.3); }
+            100% { transform: scale(1.3); }
+        }
+        @keyframes breathe-out {
+            0% { transform: scale(1.3); }
+            100% { transform: scale(0.8); }
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: #002060;
+            color: white;
+            margin-top: 2rem;
+        }
+        .instagram-link {
+            color: #FF0000;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .instagram-link:hover {
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,41 +188,121 @@
         <p class="subtitle">PRACTICE YOUR BREATHING CYCLES</p>
     </header>
     <main>
-        <div class="breathing-container">
-            <div class="breathing-logo-container">
-                <img src="image/logo-o2freediving.png" alt="Breathing Logo" class="breathing-logo" id="breathing-logo" />
-                <p id="phase-info" class="phase-info">Ready to start</p>
+        <div class="breathing-controls">
+            <div class="input-group">
+                <label for="inhale">Inhale Duration (sec):</label>
+                <input type="number" id="inhale" min="1" max="30" value="4" />
             </div>
-            <div class="breathing-controls">
-                <div class="input-group">
-                    <label for="inhale">Inhale Duration (sec):</label>
-                    <input type="number" id="inhale" min="1" max="30" value="4" />
-                </div>
-                <div class="input-group">
-                    <label for="hold">Hold Duration (sec):</label>
-                    <input type="number" id="hold" min="1" max="60" value="16" />
-                </div>
-                <div class="input-group">
-                    <label for="exhale">Exhale Duration (sec):</label>
-                    <input type="number" id="exhale" min="1" max="30" value="8" />
-                </div>
-                <div class="input-group">
-                    <label for="cycles">Number of Cycles:</label>
-                    <input type="number" id="cycles" min="1" max="20" value="5" />
-                </div>
-                <div class="button-group">
-                    <button id="start-btn" class="federation-btn">Start Exercise</button>
-                    <button id="stop-btn" class="export-btn" style="display: none;">Stop Exercise</button>
-                </div>
-                <p id="cycle-counter" class="cycle-counter">Cycle 0/5</p>
+            <div class="input-group">
+                <label for="hold">Hold Duration (sec):</label>
+                <input type="number" id="hold" min="1" max="60" value="16" />
+            </div>
+            <div class="input-group">
+                <label for="exhale">Exhale Duration (sec):</label>
+                <input type="number" id="exhale" min="1" max="30" value="8" />
+            </div>
+            <div class="input-group">
+                <label for="cycles">Number of Cycles:</label>
+                <input type="number" id="cycles" min="1" max="20" value="5" />
+            </div>
+            <div class="button-group">
+                <button id="start-btn" class="federation-btn">Start Exercise</button>
+                <button id="stop-btn" class="export-btn" style="display: none;">Stop Exercise</button>
             </div>
         </div>
     </main>
+    <div class="exercise-overlay" id="exercise-overlay">
+        <img src="image/logo-o2freediving.png" alt="Breathing Logo" class="exercise-logo" id="breathing-logo" />
+        <p id="phase-info" class="phase-info">Inhale...</p>
+        <p id="cycle-counter" class="cycle-counter">Cycle 0/5</p>
+    </div>
     <footer>
         <p>© 2025 O₂ Freediving. All rights reserved.</p>
         <a href="https://www.instagram.com/o2freediving" target="_blank" class="instagram-link" rel="noopener nofollow">Follow us on Instagram</a>
     </footer>
     <audio id="gong-sound" src="sound/gong.mp3" preload="auto"></audio>
-    <script src="respiration.js"></script>
+    <script>
+        // Global variables
+        let cycleCount = 0;
+        let totalCycles = 5;
+        let isRunning = false;
+        let gongSound = document.getElementById('gong-sound');
+        let breathingLogo = document.getElementById('breathing-logo');
+        let phaseInfo = document.getElementById('phase-info');
+        let cycleCounter = document.getElementById('cycle-counter');
+        let exerciseOverlay = document.getElementById('exercise-overlay');
+
+        // Start exercise
+        document.getElementById('start-btn').addEventListener('click', function() {
+            const inhale = parseInt(document.getElementById('inhale').value);
+            const hold = parseInt(document.getElementById('hold').value);
+            const exhale = parseInt(document.getElementById('exhale').value);
+            totalCycles = parseInt(document.getElementById('cycles').value);
+
+            if (isRunning) return;
+            isRunning = true;
+            cycleCount = 0;
+            cycleCounter.textContent = `Cycle ${cycleCount}/${totalCycles}`;
+            phaseInfo.textContent = "Inhale...";
+
+            document.getElementById('start-btn').style.display = 'none';
+            document.getElementById('stop-btn').style.display = 'block';
+            exerciseOverlay.style.display = 'flex';
+
+            startBreathingCycle(inhale, hold, exhale);
+        });
+
+        // Stop exercise
+        document.getElementById('stop-btn').addEventListener('click', function() {
+            isRunning = false;
+            breathingLogo.style.animation = 'none';
+            document.getElementById('start-btn').style.display = 'block';
+            document.getElementById('stop-btn').style.display = 'none';
+            exerciseOverlay.style.display = 'none';
+            phaseInfo.textContent = "Exercise stopped.";
+        });
+
+        // Start a breathing cycle
+        function startBreathingCycle(inhale, hold, exhale) {
+            if (!isRunning) return;
+
+            // Inhale phase
+            breathingLogo.style.animation = `breathe-in ${inhale}s ease-in-out forwards`;
+            setTimeout(() => {
+                if (!isRunning) return;
+                gongSound.currentTime = 0;
+                gongSound.play();
+                phaseInfo.textContent = "Hold...";
+
+                // Hold phase
+                breathingLogo.style.animation = `breathe-hold ${hold}s linear forwards`;
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    gongSound.currentTime = 0;
+                    gongSound.play();
+                    phaseInfo.textContent = "Exhale...";
+
+                    // Exhale phase
+                    breathingLogo.style.animation = `breathe-out ${exhale}s ease-in-out forwards`;
+                    setTimeout(() => {
+                        if (!isRunning) return;
+                        cycleCount++;
+                        cycleCounter.textContent = `Cycle ${cycleCount}/${totalCycles}`;
+
+                        if (cycleCount < totalCycles) {
+                            phaseInfo.textContent = "Inhale...";
+                            startBreathingCycle(inhale, hold, exhale);
+                        } else {
+                            phaseInfo.textContent = "Exercise completed!";
+                            document.getElementById('start-btn').style.display = 'block';
+                            document.getElementById('stop-btn').style.display = 'none';
+                            exerciseOverlay.style.display = 'none';
+                            isRunning = false;
+                        }
+                    }, exhale * 1000);
+                }, hold * 1000);
+            }, inhale * 1000);
+        }
+    </script>
 </body>
 </html>
