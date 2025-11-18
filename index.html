@@ -102,7 +102,7 @@
             gap: 0.5rem;
         }
         .sound-btn {
-            background-color: #FF0000;
+            background-color: #002060;
             color: white;
             border: none;
             padding: 0.5rem 1rem;
@@ -111,8 +111,8 @@
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
-        .sound-btn.on {
-            background-color: #00aa00;
+        .sound-btn.off {
+            background-color: #FF0000;
         }
         .button-group {
             display: flex;
@@ -235,17 +235,17 @@
                 </div>
                 <div class="sound-toggle">
                     <span>Sound:</span>
-                    <button id="inhale-sound-btn" class="sound-btn on" data-phase="inhale">ON</button>
+                    <button id="inhale-sound-btn" class="sound-btn" data-phase="inhale">ON</button>
                 </div>
             </div>
             <div class="input-sound-group">
                 <div class="input-group">
                     <label for="hold">Hold Duration (sec):</label>
-                    <input type="number" id="hold" min="1" max="60" value="7" />
+                    <input type="number" id="hold" min="1" max="60" value="16" />
                 </div>
                 <div class="sound-toggle">
                     <span>Sound:</span>
-                    <button id="hold-sound-btn" class="sound-btn on" data-phase="hold">ON</button>
+                    <button id="hold-sound-btn" class="sound-btn" data-phase="hold">ON</button>
                 </div>
             </div>
             <div class="input-sound-group">
@@ -255,7 +255,7 @@
                 </div>
                 <div class="sound-toggle">
                     <span>Sound:</span>
-                    <button id="exhale-sound-btn" class="sound-btn on" data-phase="exhale">ON</button>
+                    <button id="exhale-sound-btn" class="sound-btn" data-phase="exhale">ON</button>
                 </div>
             </div>
             <div class="input-group">
@@ -305,7 +305,7 @@
                 const phase = this.getAttribute('data-phase');
                 soundStates[phase] = !soundStates[phase];
                 this.textContent = soundStates[phase] ? 'ON' : 'OFF';
-                this.classList.toggle('on', soundStates[phase]);
+                this.classList.toggle('off', !soundStates[phase]);
             });
         });
 
