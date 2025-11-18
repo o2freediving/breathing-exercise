@@ -1,76 +1,77 @@
-// Variables globales
+// Global variables
 let cycleCount = 0;
 let totalCycles = 5;
 let isRunning = false;
-let animationInterval;
 let gongSound = document.getElementById('gong-sound');
-let logo = document.getElementById('breathing-logo');
+let breathingLogo = document.getElementById('breathing-logo');
+let phaseInfo = document.getElementById('phase-info');
+let cycleCounter = document.getElementById('cycle-counter');
 
-// Fonction pour démarrer l'exercice
+// Start exercise
 document.getElementById('start-btn').addEventListener('click', function() {
-    const inspire = parseInt(document.getElementById('inspire').value);
-    const retenue = parseInt(document.getElementById('retenue').value);
-    const expire = parseInt(document.getElementById('expire').value);
-    totalCycles = parseInt(document.getElementById('repetitions').value);
+    const inhale = parseInt(document.getElementById('inhale').value);
+    const hold = parseInt(document.getElementById('hold').value);
+    const exhale = parseInt(document.getElementById('exhale').value);
+    totalCycles = parseInt(document.getElementById('cycles').value);
 
     if (isRunning) return;
     isRunning = true;
     cycleCount = 0;
-    document.getElementById('cycle-counter').textContent = `Cycle ${cycleCount}/${totalCycles}`;
-    document.getElementById('phase-info').textContent = "Inspire...";
+    cycleCounter.textContent = `Cycle ${cycleCount}/${totalCycles}`;
+    phaseInfo.textContent = "Inhale...";
+
     document.getElementById('start-btn').style.display = 'none';
     document.getElementById('stop-btn').style.display = 'block';
 
-    startBreathingCycle(inspire, retenue, expire);
+    startBreathingCycle(inhale, hold, exhale);
 });
 
-// Fonction pour arrêter l'exercice
+// Stop exercise
 document.getElementById('stop-btn').addEventListener('click', function() {
-    clearInterval(animationInterval);
     isRunning = false;
-    logo.style.animation = 'none';
+    breathingLogo.style.animation = 'none';
     document.getElementById('start-btn').style.display = 'block';
     document.getElementById('stop-btn').style.display = 'none';
-    document.getElementById('phase-info').textContent = "Exercice arrêté.";
+    phaseInfo.textContent = "Exercise stopped.";
 });
 
-// Fonction pour lancer un cycle de respiration
-function startBreathingCycle(inspire, retenue, expire) {
+// Start a breathing cycle
+function startBreathingCycle(inhale, hold, exhale) {
     if (!isRunning) return;
 
-    // Phase d'inspiration
-    logo.style.animation = `breathe-in ${inspire}s linear forwards`;
+    // Inhale phase
+    breathingLogo.style.animation = `breathe-in ${inhale}s ease-in-out forwards`;
     setTimeout(() => {
         if (!isRunning) return;
         gongSound.currentTime = 0;
         gongSound.play();
-        document.getElementById('phase-info').textContent = "Retiens...";
+        phaseInfo.textContent = "Hold...";
 
-        // Phase de rétention
-        logo.style.animation = `breathe-hold ${retenue}s linear forwards`;
+        // Hold phase
+        breathingLogo.style.animation = `breathe-hold ${hold}s linear forwards`;
         setTimeout(() => {
             if (!isRunning) return;
             gongSound.currentTime = 0;
             gongSound.play();
-            document.getElementById('phase-info').textContent = "Expire...";
+            phaseInfo.textContent = "Exhale...";
 
-            // Phase d'expiration
-            logo.style.animation = `breathe-out ${expire}s linear forwards`;
+            // Exhale phase
+            breathingLogo.style.animation = `breathe-out ${exhale}s ease-in-out forwards`;
             setTimeout(() => {
                 if (!isRunning) return;
                 cycleCount++;
-                document.getElementById('cycle-counter').textContent = `Cycle ${cycleCount}/${totalCycles}`;
+                cycleCounter.textContent = `Cycle ${cycleCount}/${totalCycles}`;
 
                 if (cycleCount < totalCycles) {
-                    document.getElementById('phase-info').textContent = "Inspire...";
-                    startBreathingCycle(inspire, retenue, expire);
+                    phaseInfo.textContent = "Inhale...";
+                    startBreathingCycle(inhale, hold, exhale);
                 } else {
-                    document.getElementById('phase-info').textContent = "Exercice terminé !";
+                    phaseInfo.textContent = "Exercise completed!";
                     document.getElementById('start-btn').style.display = 'block';
                     document.getElementById('stop-btn').style.display = 'none';
                     isRunning = false;
                 }
-            }, expire * 1000);
-        }, retenue * 1000);
-    }, inspire * 1000);
+            }, exhale * 1000);
+        }, hold * 1000);
+    }, inhale * 1000);
 }
